@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.div_style {
+  @apply bg-blue-200 p-10 rounded-lg  mx-auto border-solid border-2 border-indigo-700 shadow-2xl;
+}
+
+.input_style {
+  @apply rounded-md placeholder-slate-400 py-1 px-2 focus:outline-none focus:ring  focus:border-indigo-700;
+}
