@@ -9,3 +9,7 @@
 .input_style {
   @apply rounded-md placeholder-slate-400 py-1 px-2 focus:outline-none focus:ring  focus:border-indigo-700;
 }
+
+.button_type_style{
+  @apply px-6 py-1 bg-indigo-700 text-white rounded-md
+}
