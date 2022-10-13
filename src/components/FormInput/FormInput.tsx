@@ -1,15 +1,66 @@
+import { FormEvent, useState } from "react";
 import { useMultiStepForm } from "../../hooks/useMultiStepForm";
 import AccountInput from "./AccountInput";
 import AddressInput from "./AddressInput";
 import UserInput from "./UserInput";
 
-const FormInput = () => {
-  const { currentIndex, currentComponent, next, back, goTo, stepComponents } =
-    useMultiStepForm([<UserInput />, <AddressInput />, <AccountInput />]);
+type InitialFormData = {
+  firstName: string;
+  lastName: string;
+  age: number | string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string | number;
+  email: string;
+  password: string;
+};
 
-  console.log(currentIndex);
+const INITIAL_DATA: InitialFormData = {
+  firstName: "",
+  lastName: "",
+  age: "",
+  street: "",
+  city: "",
+  state: "",
+  zip: "",
+  email: "",
+  password: "",
+};
+
+const FormInput = () => {
+  const [formData, setFormData] = useState(INITIAL_DATA);
+
+  const {
+    currentIndex,
+    currentComponent,
+    next,
+    back,
+    goTo,
+    stepComponents,
+    isFirstStep,
+    isLastIStep,
+  } = useMultiStepForm([
+    <UserInput {...formData} updateFields={updateFields} />,
+    <AddressInput {...formData} updateFields={updateFields}/>,
+    <AccountInput {...formData}  updateFields={updateFields} />,
+  ]);
+
+  console.log(formData);
+
+  function updateFields(fields: Partial<InitialFormData>) {
+    setFormData(prev => {
+      return {...prev,...fields}
+    })
+  }
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    next();
+  };
+
   return (
-    <form className="flex flex-col">
+    <form className="flex flex-col" onSubmit={onSubmit}>
       <div className="font-bold text-xs flex py-2 px-4 bg-indigo-700 text-white w-max rounded-md gap-1">
         <p>{currentIndex + 1}</p>
         <span>/</span>
@@ -17,20 +68,20 @@ const FormInput = () => {
       </div>
 
       {currentComponent}
+
       <div className="flex gap-4 mt-4 justify-end">
-        <button
-          onClick={() => back()}
-          type="button"
-          className="button_type_style"
-        >
-          Back
-        </button>
-        <button
-          onClick={() => next()}
-          type="button"
-          className="button_type_style"
-        >
-          Next
+        {!isFirstStep && (
+          <button
+            onClick={() => back()}
+            type="button"
+            className="button_type_style"
+          >
+            Back
+          </button>
+        )}
+
+        <button type="submit" className="button_type_style">
+          {isLastIStep ? "Submit" : "Next"}
         </button>
       </div>
     </form>
